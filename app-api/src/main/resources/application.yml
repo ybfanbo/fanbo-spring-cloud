@@ -1,0 +1,57 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: fanbo-app-api  #服务名称（注册到注册中心的名称）
+  cloud:
+    config:
+      ####读取后缀，这个环境也必须和git上配置文件的名称匹配
+      profile: pro
+      ####读取config-server注册地址
+      discovery:
+        service-id: config-server
+        enabled: true  #开启读取权限
+#开启所有端点，监控所有配置是否更新
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      #配置的集群，当前服务只注册到其中一台，但是eureka会保证集群中的某一台会有些服务，即便这台挂了，另一台也会有此服务
+      defaultZone: http://localhost:7000/eureka,http://localhost:7001/eureka
+    register-with-eureka: true    #需要将我的服务注册到eureka
+    fetch-registry: true          #需要检索
+  instance:
+    lease-renewal-interval-in-seconds: 1        #向Eureka服务端发起心跳的间隔时间，单位秒
+    lease-expiration-duration-in-seconds: 2     #Eureka服务端在收到一次心跳之后等待的时间上限，超过则剔除，单位秒
+
+#客户端超时配置一：feign的配置，连接超时及读取超时配置，默认超时是1秒
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 2000
+  hystrix:   #开启断路器
+    enabled: true
+
+#客户端超时配置二：Spring Cloud feign默认开启ribbon
+#ribbon:
+#  ConnectTimeout: 5000   #建立连接的超时时间，默认是1000毫秒
+#  ReadTimeout: 5000      #连接成功后读取服务器资源的超时时间，默认是1000毫秒
+
+#以上两种配置都可以
+
+
+# hystrix禁止服务超时时间（一般不禁止，超时时间设大一点就好了）（这里禁止的话，可以防止接口还没返回，就服务降级调用了fallback方法）
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false  #禁止

@@ -1,0 +1,23 @@
+#服务注册到eureka的地址，服务客户端是通过服务名称去config server取配置的，所以得注册到注册中心
+eureka:
+  client:
+    service-url:
+           defaultZone: http://localhost:7000/eureka,http://localhost:7001/eureka
+#服务注册名称
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://192.168.0.101/fanbo/spring-cloud-config.git
+          search-paths:
+            -  SpringCloudConfig   #在git上的目录
+        native:
+          search-locations: file:///E:/config
+      label: master   #读取的分支
+server:
+  port: 8888
+
+#配置文件在git上的命名规范：服务名称-环境.properties或 .yml，  如：user-server-dev.yml、user-server-dev.properties

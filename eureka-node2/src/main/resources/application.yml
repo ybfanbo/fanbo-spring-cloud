@@ -1,0 +1,18 @@
+server:
+  port: 7001   #服务端口
+
+spring:
+  application:
+    name: fanbo-eureka    #服务名称（eureka集群的服务名称要相同）
+
+eureka:
+  instance:
+    hostname: 127.0.0.1   #注册中心IP地址（集群环境，另外一台注册中心的IP）
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:7000/eureka/      #集群环境下的另一台注册中心的地址（如果是3台以上的集群，这里逗号隔开）
+    register-with-eureka: true      #自已是注册中心，是否将自己注册给集群下的其它注册中心（集群时置为true），默认是true
+    fetch-registry: true            #自己是注册中心，不需要去检索服务信息，所以置为false（集群时置为true）
+  server:
+    enable-self-preservation: false       #关闭自我保护机制，保证不可用服务及时踢除
+    eviction-interval-timer-in-ms: 2000   #清理间隔，单位毫秒，默认是60*1000

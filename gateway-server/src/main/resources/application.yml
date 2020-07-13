@@ -1,0 +1,38 @@
+#server:
+#  port: 80  #默认是8080端口
+spring:
+  application:
+    name: gateway-server  #服务名称
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  #开启以服务id去注册中心获取转发地址
+          lower-case-service-id: true  #是将请求路径上的服务名配置为小写(因为服务注册的时候，向注册中心注册时将服务名转成大写的了）
+      routes:
+        - id: app-api  #唯一标识
+          uri: lb://fanbo-app-api/   #lb表示通过服务名称到注册中心去找相对应的地址
+          filters:
+            - StripPrefix=1   #StripPrefix参数表示在将请求发送到下游之前从请求中剥离的路径个数，如果PATH=/xxx/app-api/**，那么stripPefix=2
+          predicates:
+            - Path=/app-api/**  #如果访问localhost/app-api/ 就转发到 localhost:8001
+#开启限流
+#          - name: RequestRateLimiter  #限流，name必须是RequestRateLimiter
+#            args:
+#                 key-resolver: "#{@hostAddrKeyResolver}"
+#                 redis-rate-limiter.replenishRate: 1   #允许用户每秒执行的请求数（每秒请求的平均速率）
+#                 redis-rate-limiter.burstCapacity: 3   #一秒钟内允许执行的最大请求数
+#redis:
+#  host: localhost
+#  port: 6379
+
+eureka:
+  client:
+    service-url:
+      #配置的集群，当前服务只注册到其中一台，但是eureka会保证集群中的某一台会有些服务，即便这台挂了，另一台也会有此服务
+      defaultZone: http://localhost:7000/eureka,http://localhost:7001/eureka
+    register-with-eureka: true    #需要将我的服务注册到eureka
+    fetch-registry: true          #需要检索
+  instance:
+    lease-renewal-interval-in-seconds: 1        #向Eureka服务端发起心跳的间隔时间，单位秒
+    lease-expiration-duration-in-seconds: 2     #Eureka服务端在收到一次心跳之后等待的时间上限，超过则剔除，单位秒

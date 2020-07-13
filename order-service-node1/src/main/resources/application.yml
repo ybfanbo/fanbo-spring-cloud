@@ -1,0 +1,16 @@
+server:
+  port: 9010
+
+spring:
+  application:
+    name: fanbo-order-service  #服务的别名（注册到注册中心的名称）
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7000/eureka,http://localhost:7001/eureka    #注册到这个注册中心
+    register-with-eureka: true   #需要将我的服务注册到eureka
+    fetch-registry: true   #需要检索
+  instance:
+    lease-renewal-interval-in-seconds: 1  #向Eureka服务端发起心跳的间隔时间，单位秒
+    lease-expiration-duration-in-seconds: 2   #Eureka服务端在收到一次心跳之后等待的时间上限，超过则剔除，单位秒
