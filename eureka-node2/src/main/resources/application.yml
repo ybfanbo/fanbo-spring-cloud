@@ -12,7 +12,11 @@ eureka:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:7000/eureka/      #集群环境下的另一台注册中心的地址（如果是3台以上的集群，这里逗号隔开）
     register-with-eureka: true      #自已是注册中心，是否将自己注册给集群下的其它注册中心（集群时置为true），默认是true
-    fetch-registry: true            #自己是注册中心，不需要去检索服务信息，所以置为false（集群时置为true）
+    fetch-registry: true            #要不要去注册中心获取其他服务的地址 （集群时置为true）
   server:
-    enable-self-preservation: false       #关闭自我保护机制，保证不可用服务及时踢除
+    enable-self-preservation: false       #false为关闭自我保护机制，保证不可用服务及时踢除。true为开启保护，不会及时踢除
     eviction-interval-timer-in-ms: 2000   #清理间隔，单位毫秒，默认是60*1000
+
+#自我保护：
+  #服务注册到注册中心，默认每30秒向注册中心发出心跳
+  #注册中心在一定时间内(默认60秒)，没有收到心跳，则踢除此服务

@@ -1,4 +1,4 @@
-package com.fanbo.app.controller;
+package com.fanbo.h5.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ public class UserController {
 
         String result = restTemplate.getForObject(url, String.class);
 
-        return "来自 app-api " + result;
+        return "来自 h5-api " + result;
     }
 
     @RequestMapping("/getThreadName")

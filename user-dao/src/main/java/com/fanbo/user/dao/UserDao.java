@@ -8,7 +8,7 @@ public class UserDao {
 
     @RequestMapping("/getUser")
     public String getUser(){
-        return "通过RestTemplate方式获取用户信息, Dao 返回 OK！";
+        return "通过RestTemplate方式获取用户信息, UserDao 返回 OK！";
     }
 
 }

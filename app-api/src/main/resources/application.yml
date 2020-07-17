@@ -12,7 +12,7 @@ spring:
       discovery:
         service-id: config-server
         enabled: true  #开启读取权限
-#开启所有端点，监控所有配置是否更新
+#开启所有端点，监控所有配置是否更新  actuator配置
 management:
   endpoints:
     web:
@@ -25,7 +25,7 @@ eureka:
       #配置的集群，当前服务只注册到其中一台，但是eureka会保证集群中的某一台会有些服务，即便这台挂了，另一台也会有此服务
       defaultZone: http://localhost:7000/eureka,http://localhost:7001/eureka
     register-with-eureka: true    #需要将我的服务注册到eureka
-    fetch-registry: true          #需要检索
+    fetch-registry: true          #作用：要不要去注册中心获取其他服务的地址
   instance:
     lease-renewal-interval-in-seconds: 1        #向Eureka服务端发起心跳的间隔时间，单位秒
     lease-expiration-duration-in-seconds: 2     #Eureka服务端在收到一次心跳之后等待的时间上限，超过则剔除，单位秒
@@ -48,10 +48,11 @@ feign:
 #以上两种配置都可以
 
 
-# hystrix禁止服务超时时间（一般不禁止，超时时间设大一点就好了）（这里禁止的话，可以防止接口还没返回，就服务降级调用了fallback方法）
+# hystrix是否禁止服务超时时间（一般不禁止，超时时间设大一点就好了）（这里禁止的话，可以防止接口还没返回，就服务降级调用了fallback方法）
+#比如超时时间是2秒，某接口处理数据花了3秒钟才返回，于是hystrix认为这个接口繁忙，调了fallback
 hystrix:
   command:
     default:
       execution:
         timeout:
-          enabled: false  #禁止
+          enabled: false  #不禁止

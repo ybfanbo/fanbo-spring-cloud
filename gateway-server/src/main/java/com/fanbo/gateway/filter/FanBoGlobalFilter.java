@@ -19,14 +19,17 @@ public class FanBoGlobalFilter implements GlobalFilter {
         String headerToken = request.getHeaders().getFirst("Token");  //请求头的token
 
         String token = request.getQueryParams().getFirst("token");
-        if (StringUtils.isEmpty(token)){
+
+        //判断token是否有效
+        if ("1234".equals(token)){
+            return chain.filter(exchange);  //放行
+        }else {
+            System.out.println("token无效...........");
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.FORBIDDEN);  //403
             return response.setComplete(); //拦截
         }
 
-        //判断token是否有效
 
-        return chain.filter(exchange);  //放行
     }
 }

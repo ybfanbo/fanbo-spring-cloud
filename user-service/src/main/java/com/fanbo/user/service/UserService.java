@@ -19,7 +19,7 @@ public class UserService {
 
         String daoResult = restTemplate.getForObject(url, String.class);
 
-        return daoResult + "  通过RestTemplate方式获取用户信息, Service 返回 OK！";
+        return daoResult + "  通过RestTemplate方式获取用户信息, UserService 返回 OK！";
     }
 
     @RequestMapping("/getThreadName")
