@@ -1,6 +1,7 @@
 package com.fanbo.app.controller;
 
 import com.fanbo.app.feign.OrderFeign;
+import com.fanbo.beans.UserInfo;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,10 @@ public class OrderController {
 
     @RequestMapping("/getOrderInfo")
     public String getOrderInfo(){
-        return "api调order服务返回的结果是：" + orderFeign.getOrderInfo();
+        UserInfo userInfo = new UserInfo();
+        userInfo.setAge(500);
+        userInfo.setName("国在中要工地在");
+        return "api调order服务返回的结果是：" + orderFeign.getOrderInfo(userInfo);
     }
 
     @RequestMapping("/feignTimeOutTest")
